@@ -1,46 +1,67 @@
-<!-- templates/admin_panel.html -->
 <!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
     <title>Admin Paneli</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <style>
         body {
             background-color: #0e3d0e;
-            color: white;
             font-family: Arial, sans-serif;
-            text-align: center;
-            padding-top: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
         }
+
+        .admin-box {
+            background-color: #111;
+            padding: 40px 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.2);
+            text-align: center;
+            width: 320px;
+        }
+
+        .admin-box h2 {
+            color: white;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+
         .admin-buttons {
             display: flex;
             flex-direction: column;
-            gap: 20px;
-            max-width: 300px;
-            margin: auto;
+            gap: 15px;
         }
 
-        .admin-buttons a {
-            padding: 15px;
+        .admin-button {
             background-color: white;
             color: black;
-            text-decoration: none;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
             font-weight: bold;
-            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
             transition: background-color 0.3s;
         }
 
-        .admin-buttons a:hover {
+        .admin-button:hover {
             background-color: #e0e0e0;
         }
     </style>
 </head>
 <body>
-    <h1>⚙️ Admin Paneli</h1>
+
+<div class="admin-box">
+    <h2>⚙️ Admin Paneli</h2>
     <div class="admin-buttons">
-        <a href="/create-match">🎯 Maç Oluştur</a>
-        <a href="/oyuncu-duzenle">🧍 Oyuncu Düzenle</a>
+        <a href="{{ url_for('create_match') }}" class="admin-button">🎯 Maç Oluştur</a>
+        <a href="{{ url_for('oyuncu_duzenle') }}" class="admin-button">🧍 Oyuncu Düzenle</a>
     </div>
+</div>
+
+
 </body>
 </html>

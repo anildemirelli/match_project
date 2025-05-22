@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Oyuncu Düzenle</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #002b0f;
+            color: white;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #003b14;
+            font-size: 14px;
+            min-width: 1000px;
+        }
+
+        th, td {
+            border: 1px solid #1a5c2e;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #014d1c;
+            position: sticky;
+            top: 0;
+        }
+
+        td[contenteditable="true"] {
+            background-color: #094d29;
+        }
+
+        button {
+            padding: 6px 12px;
+            background-color: #00cc66;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #009944;
+        }
+
+        .ekle-row input {
+            width: 100%;
+            padding: 4px;
+            box-sizing: border-box;
+        }
+
+        .ekle-row td {
+            background-color: #062a17;
+        }
+
+        @media screen and (max-width: 768px) {
+            table {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<h2>⚙ Oyuncu Düzenle</h2>
+
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Ad Soyad</th>
+                <th>Mevki 1</th>
+                <th>Mevki 2</th>
+                <th>Mevki 3</th>
+                <th>DEF</th>
+                <th>ATT</th>
+                <th>OVR</th>
+                <th>Tür</th>
+                <th>Sabit Mevki</th>
+                <th>Tercih Side</th>
+                <th>İşlem</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="ekle-row">
+                {% for field in ['ad_soyad','mevki1','mevki2','mevki3','defance','attack','overall','type','sabit_mevki','tercih_side'] %}
+                <td><input type="text" placeholder="{{ field }}" id="ekle-{{ field }}"></td>
+                {% endfor %}
+                <td><button onclick="ekle()">Ekle</button></td>
+            </tr>
+            {% for p in oyuncular %}
+            <tr data-id="{{ p.id }}">
+                <td contenteditable="true">{{ p.ad_soyad }}</td>
+                <td contenteditable="true">{{ p.mevki1 }}</td>
+                <td contenteditable="true">{{ p.mevki2 }}</td>
+                <td contenteditable="true">{{ p.mevki3 }}</td>
+                <td contenteditable="true">{{ p.defance }}</td>
+                <td contenteditable="true">{{ p.attack }}</td>
+                <td contenteditable="true">{{ p.overall }}</td>
+                <td contenteditable="true">{{ p.type }}</td>
+                <td contenteditable="true">{{ p.sabit_mevki }}</td>
+                <td contenteditable="true">{{ p.tercih_side }}</td>
+                <td><button onclick="guncelle(this)">Kaydet</button></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+function guncelle(button) {
+    const tr = button.closest("tr");
+    const id = tr.dataset.id;
+    const cells = tr.querySelectorAll("td[contenteditable]");
+    const veri = Array.from(cells).map(td => td.innerText.trim());
+
+    fetch('/oyuncu-guncelle', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            id: id,
+            ad_soyad: veri[0],
+            mevki1: veri[1],
+            mevki2: veri[2],
+            mevki3: veri[3],
+            defance: veri[4],
+            attack: veri[5],
+            overall: veri[6],
+            type: veri[7],
+            sabit_mevki: veri[8],
+            tercih_side: veri[9]
+        })
+    }).then(r => {
+        if (r.ok) alert("✅ Güncellendi");
+        else alert("❌ Hata oluştu");
+    });
+}
+
+function ekle() {
+    const veri = ['ad_soyad','mevki1','mevki2','mevki3','defance','attack','overall','type','sabit_mevki','tercih_side']
+        .map(id => document.getElementById("ekle-" + id).value.trim());
+
+    fetch('/oyuncu-ekle', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            ad_soyad: veri[0],
+            mevki1: veri[1],
+            mevki2: veri[2],
+            mevki3: veri[3],
+            defance: veri[4] || Math.floor(Math.random()*40 + 60),
+            attack: veri[5] || Math.floor(Math.random()*40 + 60),
+            overall: veri[6] || Math.floor(Math.random()*20 + 80),
+            type: veri[7] || "oyuncu",
+            sabit_mevki: veri[8] || null,
+            tercih_side: veri[9] || null
+        })
+    }).then(r => {
+        if (r.ok) location.reload();
+        else alert("❌ Ekleme başarısız");
+    });
+}
+</script>
+
+</body>
+</html>

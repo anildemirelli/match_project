@@ -1,0 +1,25 @@
+
+🟢 Takım A
+KALECI     | Semih                | DEF:  85 | ATT:  80 | OVR:  91
+DEFANS     | Hakan                | DEF:  90 | ATT:  65 | OVR:  86
+DEFANS     | Batur                | DEF:  70 | ATT:  70 | OVR:  77
+DEFANS     | Caner                | DEF:  75 | ATT:  75 | OVR:  86
+ORTASAHA   | Anıl                 | DEF:  75 | ATT:  85 | OVR:  92
+ORTASAHA   | Remzi                | DEF:  70 | ATT:  90 | OVR:  92
+ORTASAHA   | Tuğcan               | DEF:  65 | ATT:  85 | OVR:  86
+ORTASAHA   | Enes                 | DEF:  85 | ATT:  80 | OVR:  94
+FORVET     | Kadir                | DEF:  40 | ATT:  75 | OVR:  66
+DEF: 72.8, ATT: 78.3, OVR: 85.6
+
+🔵 Takım B
+KALECI     | Yahya                | DEF:  85 | ATT:  60 | OVR:  93
+DEFANS     | Emre                 | DEF:  85 | ATT:  80 | OVR:  91
+DEFANS     | Faik                 | DEF:  90 | ATT:  65 | OVR:  86
+DEFANS     | Mehmet               | DEF:  80 | ATT:  70 | OVR:  83
+ORTASAHA   | Onur                 | DEF:  70 | ATT:  90 | OVR:  92
+ORTASAHA   | Selim Akçam          | DEF:  75 | ATT:  85 | OVR:  92
+ORTASAHA   | Ali                  | DEF:  75 | ATT:  80 | OVR:  89
+ORTASAHA   | Emre Ekşi            | DEF:  70 | ATT:  90 | OVR:  92
+FORVET     | Serkan K.            | DEF:  75 | ATT:  90 | OVR:  93
+DEF: 78.3, ATT: 78.9, OVR: 90.1
+============================================================

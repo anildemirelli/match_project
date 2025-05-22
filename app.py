@@ -63,7 +63,7 @@ def login():
             flash(f"✅ Hoş geldin, {user.ad_soyad}!")
 
             if user.type == 'admin':
-                return redirect(url_for('create_match'))
+                return redirect(url_for('admin_panel'))
             else:
                 return redirect(url_for('index'))
 
@@ -82,7 +82,73 @@ def dashboard():
 def admin_panel():
     if session.get('user_type') != 'admin':
         return redirect(url_for('index'))
-    return f"🔐 Admin paneline hoş geldin, {session['username']}!"
+    return render_template("admin_panel.html")
+
+@app.route("/oyuncu-guncelle", methods=["POST"])
+def oyuncu_guncelle():
+    data = request.get_json()
+    player_id = data.get("id")
+
+    player = Player.query.get(player_id)
+    if not player:
+        return jsonify({"error": "Oyuncu bulunamadı"}), 404
+
+    player.ad_soyad = data.get("ad_soyad", player.ad_soyad)
+    player.mevki1 = data.get("mevki1", player.mevki1)
+    player.mevki2 = data.get("mevki2", player.mevki2)
+    player.mevki3 = data.get("mevki3", player.mevki3)
+    player.defance = int(data.get("defance", player.defance) or 0)
+    player.attack = int(data.get("attack", player.attack) or 0)
+    player.overall = int(data.get("overall", player.overall) or 0)
+    player.type = data.get("type", player.type)
+    player.sabit_mevki = data.get("sabit_mevki", player.sabit_mevki)
+    player.tercih_side = data.get("tercih_side", player.tercih_side)
+
+    try:
+        db.session.commit()
+        return jsonify({"success": True})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/oyuncu-duzenle")
+def oyuncu_duzenle():
+    oyuncular = Player.query.all()
+    return render_template("oyuncu_duzenle.html", oyuncular=oyuncular)
+
+@app.route("/oyuncu-ekle", methods=["POST"])
+def oyuncu_ekle():
+    data = request.get_json()
+
+    # Eksik alanlar varsa rastgele üret
+    def get_value(k, default):
+        return data.get(k) if data.get(k) not in [None, '', 'None'] else default
+
+    new_player = Player(
+        ad_soyad = get_value("ad_soyad", "Bilinmeyen"),
+        mevki1 = get_value("mevki1", "ortasaha"),
+        mevki2 = get_value("mevki2", "defans"),
+        mevki3 = get_value("mevki3", "forvet"),
+        defance = int(get_value("defance", random.randint(60, 90))),
+        attack = int(get_value("attack", random.randint(60, 90))),
+        overall = int(get_value("overall", random.randint(70, 95))),
+        type = get_value("type", "oyuncu"),
+        sabit_mevki = get_value("sabit_mevki", None),
+        tercih_side = get_value("tercih_side", None),
+        username = get_value("ad_soyad", "user") + str(random.randint(1000, 9999)),
+        email = get_value("ad_soyad", "user").replace(" ", "").lower() + "@mail.com",
+        password = "1234"  # Varsayılan parola, istenirse kullanıcıya gösterilebilir
+    )
+
+    try:
+        db.session.add(new_player)
+        db.session.commit()
+        return jsonify({"success": True})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
+
 
 @app.route('/create-match', methods=['GET', 'POST'])
 def create_match():
