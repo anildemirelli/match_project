@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Antrenman Sahası</title>
+    <style>
+        body {
+            background-color: #0e3d0e;
+            display: flex;
+            justify-content: center;
+            padding: 10px;
+            font-family: Arial;
+        }
+
+        .saha {
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    grid-template-rows: repeat(22, 50px);  /* 🔺 Satır başı yükseklik 40px */
+    gap: 2px;
+    width: 750px;
+    height: 1020px;
+    background-color: #137913;
+    border: 4px solid white;
+    padding: 10px;
+    position: relative;
+    transform: scale(1.1); /* büyütülmüş görüntü */
+    transform-origin: top left;
+}
+
+    /* Izgara çizgileri */
+    background-image:
+        linear-gradient(to right, rgba(255,255,255,0.2) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,0.2) 1px, transparent 1px);
+    background-size: calc(100% / 9) calc(100% / 20);
+}
+/* Tüm grid hücrelerine border göstermek için test sınıfı */
+.grid-cell {
+    border: 1px dashed rgba(255, 255, 255, 0.2);
+}
+        .orta-cizgi {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: white;
+            transform: translateY(-1px);
+            z-index: 2;
+            border: 2px solid white;
+        }
+
+        .kaleci-kale {
+            width: 150px;
+            height: 75px;
+            background-color: transparent;
+            border: 5px solid white;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .kale-ust { top: -3px; }
+        .kale-alt { bottom: -3px; }
+
+        .pozisyon {
+        width: 100%;
+        height: 100%;
+        background-size: contain;
+        background-position: center;
+        background-repeat: no-repeat;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-size: 11px;
+        color: white;
+        font-weight: bold;
+        overflow: hidden;
+        background-color: transparent;
+        }
+
+        .pozisyon .yazi {
+            position: relative;
+            z-index: 2;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            text-align: center;
+            background-color: transparent; /* yarı saydam zemin */
+            padding: 2px 4px;
+            border-radius: 4px;
+            line-height: 1.2;
+            max-width: 90%;
+        }
+
+        .kirmizi-forma {
+            background-image: url('/static/formalar/kirmizi_forma.png');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .mavi-forma {
+            background-image: url('/static/formalar/mavi_forma.png');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .yesil-forma {
+            background-image: url('/static/formalar/yesil_forma.png');
+}
+        .kaleci_a_1      { background-color: transparent; grid-column: 5; grid-row: 1; width: 90px; height: 70px; }
+        .defans_a_sol     { background-color: transparent; grid-column: 8; grid-row: 4; width: 90px; height: 90px; }
+        .defans_a_merkez       { background-color: transparent; grid-column: 5; grid-row: 3; width: 90px; height: 90px; }
+        .defans_a_sag     { background-color: transparent; grid-column: 2; grid-row: 4; width: 90px; height: 90px; }
+        .orta_saha_a_merkez1    { background-color: transparent; grid-column: 6; grid-row: 6; width: 90px; height: 90px; }
+        .orta_saha_a_merkez2   { background-color: transparent; grid-column: 4; grid-row: 6; width: 90px; height: 90px; }
+        .orta_saha_a_sag    { background-color: transparent; grid-column: 1; grid-row: 7; width: 90px; height: 90px; }
+        .orta_saha_a_sol    { background-color: transparent; grid-column: 9; grid-row: 7; width: 90px; height: 90px; }
+        .forvet_a_1       { background-color: transparent; grid-column: 5; grid-row: 9; width: 90px; height: 90px; }
+
+        .kaleci_b_1      { background-color: transparent; grid-column: 5; grid-row: 19; width: 90px; height: 90px; }
+        .defans_b_sag    { background-color: transparent; grid-column: 8; grid-row: 16; width: 90px; height: 90px; }
+        .defans_b_merkez      { background-color: transparent; grid-column: 5; grid-row: 17; width: 90px; height: 90px; }
+        .defans_b_sol     { background-color: transparent; grid-column: 2; grid-row: 16; width: 90px; height: 90px; }
+        .orta_saha_b_merkez1    { background-color: transparent; grid-column: 6; grid-row: 14; width: 90px; height: 90px; }
+        .orta_saha_b_merkez2   { background-color: transparent; grid-column: 4; grid-row: 14; width: 90px; height: 90px; }
+        .orta_saha_b_sag   { background-color: transparent; grid-column: 1; grid-row: 13; width: 90px; height: 90px; }
+        .orta_saha_b_sol    { background-color: transparent; grid-column: 9; grid-row: 13; width: 90px; height: 90px; }
+        .forvet_b_1       { background-color: transparent; grid-column: 5; grid-row: 11; width: 90px; height: 90px; }
+        .istatistik-box {
+        position: absolute;
+        background-color: rgba(0, 0, 0, 0.6);
+        padding: 4px 12px;
+        border-radius: 6px;
+        color: white;
+        font-size: 13px;
+        line-height: 1.4;
+        font-weight: bold;
+        z-index: 999;
+        }
+
+        .takim-a-box {
+            top: 10px;
+            right: 10px;
+            text-align: right;
+        }
+
+        .takim-b-box {
+            bottom: 425px;
+            right: 10px;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+
+<div class="saha" id="sahaAlani">
+    <div class="istatistik-box takim-a-box">
+    🟥 <strong>Takım A</strong><br>
+    DEF: {{ def_a }} <br>
+    ATT: {{ att_a }} <br>
+    OVR: {{ ovr_a }}
+</div>
+<div class="istatistik-box takim-b-box">
+    ⬛ <strong>Takım B</strong><br>
+    DEF: {{ def_b }} <br>
+    ATT: {{ att_b }} <br>
+    OVR: {{ ovr_b }}
+</div>
+    <!-- Orta çizgi -->
+    <div class="orta-cizgi"></div>
+
+    <!-- Kale şekilleri -->
+    <div class="kaleci-kale kale-ust"></div>
+    <div class="kaleci-kale kale-alt"></div>
+
+     <!-- Takım A Pozisyonları -->
+    <div class="pozisyon kaleci_a_1">Kaleci</div>
+    <div class="pozisyon defans_a_sol">SolBek</div>
+    <div class="pozisyon defans_a_merkez">Stoper</div>
+    <div class="pozisyon defans_a_sag">SağBek</div>
+    <div class="pozisyon orta_saha_a_merkez1">OrtaSaha</div>
+    <div class="pozisyon orta_saha_a_merkez2">OrtaSaha</div>
+    <div class="pozisyon orta_saha_a_sag">Sağ Kanat</div>
+    <div class="pozisyon orta_saha_a_sol">Sol Kanat</div>
+    <div class="pozisyon forvet_a_1">Santrafor</div>
+
+    <!-- Takım B Pozisyonları -->
+    <div class="pozisyon kaleci_b_1">Kaleci</div>
+    <div class="pozisyon defans_b_sag">SagBek</div>
+    <div class="pozisyon defans_b_merkez">Stoper</div>
+    <div class="pozisyon defans_b_sol">SolBek</div>
+    <div class="pozisyon orta_saha_b_merkez1">OrtaSaha</div>
+    <div class="pozisyon orta_saha_b_merkez2">OrtaSaha</div>
+    <div class="pozisyon orta_saha_b_sag">Sağ Kanat</div>
+    <div class="pozisyon orta_saha_b_sol">Sol Kanat</div>
+    <div class="pozisyon forvet_b_1">Santrafor</div>
+
+</div>
+<script>
+function yerlestirPozisyonlara(takim, kod) {
+    const yerlesim = {
+        kaleci: [`kaleci_${kod}_1`],
+        defans: [`defans_${kod}_sol`, `defans_${kod}_merkez`, `defans_${kod}_sag`],
+        ortasaha: [`orta_saha_${kod}_merkez1`, `orta_saha_${kod}_merkez2`, `orta_saha_${kod}_sol`, `orta_saha_${kod}_sag`],
+        forvet: [`forvet_${kod}_1`]
+    };
+
+    const dolu = new Set();
+
+    // === 1. Kaleci
+    const kaleci = takim.find(o => o.mevki1 === "kaleci");
+    if (kaleci) {
+        const div = document.querySelector(`.${yerlesim.kaleci[0]}`);
+        if (div) {
+            div.innerHTML = `<div class="yazi">${kaleci.ad_soyad}<br><small>OVR: ${kaleci.overall}</small></div>`;
+            div.classList.add(kod === "a" ? "kirmizi-forma" : "mavi-forma");
+            dolu.add(yerlesim.kaleci[0]);
+        }
+    }
+
+    // === 2. Genel Fonksiyon: defans, ortasaha, forvet
+    function yerlestirMevki(pozisyon, adet) {
+        let oyuncular = takim.filter(o => o.mevki1 === pozisyon);
+        oyuncular.sort((a, b) => b.overall - a.overall);
+        const hedefler = yerlesim[pozisyon];
+
+        for (let hedefClass of hedefler) {
+            if (dolu.has(hedefClass)) continue;
+
+            // hedef pozisyonun side’ı ne?
+            const side = hedefClass.includes("_sol") ? "sol" :
+                         hedefClass.includes("_sag") ? "sag" :
+                         hedefClass.includes("_merkez") ? "merkez" : null;
+
+            // tercihe göre uygun oyuncuyu bul
+            let oyuncu = oyuncular.find(o => (o.tercih_side || "").toLowerCase() === side);
+            if (!oyuncu) oyuncu = oyuncular[0]; // yoksa sıradaki en iyi
+
+            if (oyuncu) {
+                const div = document.querySelector(`.${hedefClass}`);
+                if (div) {
+                    div.innerHTML = `<div class="yazi">${oyuncu.ad_soyad}<br><small>${oyuncu.overall}</small></div>`;
+                    div.classList.add(kod === "a" ? "kirmizi-forma" : "mavi-forma");
+                    dolu.add(hedefClass);
+                    oyuncular = oyuncular.filter(o => o.ad_soyad !== oyuncu.ad_soyad); // listeden çıkar
+                }
+            }
+        }
+    }
+
+    yerlestirMevki("defans");
+    yerlestirMevki("ortasaha");
+    yerlestirMevki("forvet");
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const takimA = {{ takimA|tojson|safe }};
+    const takimB = {{ takimB|tojson|safe }};
+    yerlestirPozisyonlara(takimA, "a");
+    yerlestirPozisyonlara(takimB, "b");
+});
+</script>
+
+<!-- html2canvas CDN -->
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const sahaDiv = document.getElementById("sahaAlani");
+    if (!sahaDiv) return;
+
+    // Bekle: 1 saniye sonra (tüm forma yerleşimleri yüklensin)
+    setTimeout(() => {
+        html2canvas(sahaDiv, {
+            scale: 2, // 🔺 Kalite artırımı burada yapılıyor
+            useCORS: true // Eğer forma görselleri CORS hatası veriyorsa
+        }).then(canvas => {
+            canvas.toBlob(blob => {
+                const item = new ClipboardItem({ "image/png": blob });
+                navigator.clipboard.write([item]).then(() => {
+                    console.log("📋 Saha otomatik olarak panoya kopyalandı.");
+                }).catch(err => {
+                    console.error("❌ Kopyalama başarısız:", err);
+                });
+            });
+        });
+    }, 1000);
+});
+
+</script>
+
+
+
+
+
+</body>
+</html>

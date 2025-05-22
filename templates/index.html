@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Giriş / Kayıt</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+
+        <!-- ⚠️ Flash mesaj alanı tam buraya -->
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <ul class="flash-messages">
+              {% for message in messages %}
+                <li>{{ message }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
+
+        <!-- GİRİŞ FORMU -->
+        <div class="form-container" id="login-form">
+            <h2>Giriş Yap</h2>
+            <form method="POST" action="/login">
+                <input type="text" name="username" placeholder="Kullanıcı Adı" required>
+                <input type="password" name="password" placeholder="Şifre" required>
+                <button type="submit">Giriş Yap</button>
+                <p>Hesabın yok mu? <a href="#" id="show-register">Kayıt Ol</a></p>
+            </form>
+        </div>
+
+        <!-- KAYIT FORMU -->
+        <div class="form-container hidden" id="register-form">
+            <h2>Kayıt Ol</h2>
+            <form method="POST" action="/register">
+                <input type="text" name="ad_soyad" placeholder="Ad Soyad" required>
+                <input type="text" name="username" placeholder="Kullanıcı Adı" required>
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="password" name="password" placeholder="Şifre" required>
+                <button type="submit">Kayıt Ol</button>
+                <p>Zaten hesabın var mı? <a href="#" id="show-login">Giriş Yap</a></p>
+            </form>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
